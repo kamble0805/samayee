@@ -48,7 +48,7 @@ urlpatterns = [
     path('api/health/', health_check, name='health-check'),
     path('api/test-auth/', test_auth, name='test-auth'),
     path('api/accounts/', include('accounts.urls')),
-    path('api/students/', include('students.urls')),
+    path('api/', include('students.urls')),
 ]
 
 # Serve React frontend for all non-API routes
