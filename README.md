@@ -1,373 +1,166 @@
-# School Management System
+# Samayee - School Management System
 
-A comprehensive school management system built with Django REST Framework backend and React frontend, featuring student management, fee tracking, and payment processing.
+A comprehensive school management system built with Django REST API backend and React frontend for efficient student and fee management.
 
-## 🚀 Features
+## Features
 
-### Backend (Django)
-- **User Authentication**: Custom user model with email-based authentication
-- **Student Management**: CRUD operations for student records
-- **Fee Structure Management**: Flexible fee structure configuration
-- **Payment Tracking**: Payment processing with due dates and status tracking
-- **RESTful API**: Complete API endpoints for all operations
-- **Token Authentication**: Secure API access with JWT tokens
-- **CORS Support**: Cross-origin resource sharing for frontend integration
+- **User Authentication**: Secure login/register system with token-based authentication
+- **Student Management**: Add, edit, delete, and search students
+- **Fee Management**: Track student payments, fee structures, and payment history
+- **Payment Tracking**: Monitor payment status, due dates, and outstanding amounts
+- **Responsive UI**: Modern, mobile-friendly interface built with React and Bootstrap
 
-### Frontend (React)
-- **Modern UI**: Clean and responsive design with CSS3
-- **Authentication Pages**: Login and registration with form validation
-- **Dashboard**: Overview of students, payments, and system statistics
-- **Student Management**: Add, edit, view, and delete student records
-- **Payment Processing**: Fee payment interface with status tracking
-- **Protected Routes**: Secure access to authenticated pages
-- **Real-time Updates**: Dynamic data loading and state management
-
-## 🛠️ Technology Stack
+## Tech Stack
 
 ### Backend
-- **Django 4.2+**: Web framework
-- **Django REST Framework**: API development
-- **SQLite**: Database (can be configured for PostgreSQL/MySQL)
-- **Django CORS Headers**: Cross-origin resource sharing
-- **Python 3.8+**: Programming language
+- Django 5.1.4
+- Django REST Framework 3.14.0
+- PostgreSQL (production) / SQLite (development)
+- Gunicorn (production server)
+- WhiteNoise (static file serving)
 
 ### Frontend
-- **React 18**: Frontend framework
-- **React Router**: Client-side routing
-- **CSS3**: Styling and responsive design
-- **Fetch API**: HTTP requests
-- **Context API**: State management
+- React 19.1.0
+- React Router DOM 7.6.3
+- Axios for API communication
+- Bootstrap 5.3.7 for styling
 
-## 📋 Prerequisites
+## Local Development Setup
 
-- Python 3.8 or higher
-- Node.js 16 or higher
-- npm or yarn package manager
-
-## 🚀 Installation & Setup
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- npm or yarn
 
 ### Backend Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd samayee
-   ```
-
-2. **Create and activate virtual environment**
+1. Clone the repository
+2. Create a virtual environment:
    ```bash
    python -m venv env
-   # On Windows
-   env\Scripts\activate
-   # On macOS/Linux
-   source env/bin/activate
+   source env/bin/activate  # On Windows: env\Scripts\activate
    ```
-
-3. **Install Python dependencies**
+3. Install Python dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-
-4. **Run database migrations**
+4. Run migrations:
    ```bash
-   python manage.py makemigrations
    python manage.py migrate
    ```
-
-5. **Create superuser (optional)**
+5. Create a superuser:
    ```bash
    python manage.py createsuperuser
    ```
-
-6. **Start Django development server**
+6. Start the Django development server:
    ```bash
    python manage.py runserver
    ```
 
-The backend will be available at `http://localhost:8000`
-
 ### Frontend Setup
-
-1. **Navigate to React app directory**
+1. Navigate to the React app directory:
    ```bash
    cd react_app
    ```
-
-2. **Install Node.js dependencies**
+2. Install dependencies:
    ```bash
    npm install
    ```
-
-3. **Start React development server**
+3. Start the development server:
    ```bash
    npm start
    ```
 
-The frontend will be available at `http://localhost:3000`
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- Admin Panel: http://localhost:8000/admin
 
-## 📚 API Documentation
+## Deployment on Render
 
-### Authentication Endpoints
+This application is configured for easy deployment on Render. Follow these steps:
 
-#### Register User
-```
-POST /api/accounts/register/
-Content-Type: application/json
+### 1. Prepare Your Repository
+- Ensure all files are committed to your Git repository
+- The `render.yaml` file is already configured for deployment
 
-{
-    "email": "user@example.com",
-    "username": "username",
-    "password": "password123",
-    "confirm_password": "password123",
-    "first_name": "John",
-    "last_name": "Doe"
-}
-```
+### 2. Deploy on Render
+1. Go to [Render Dashboard](https://dashboard.render.com/)
+2. Click "New +" and select "Blueprint"
+3. Connect your GitHub repository
+4. Render will automatically detect the `render.yaml` configuration
+5. Click "Apply" to deploy
 
-#### Login User
-```
-POST /api/accounts/login/
-Content-Type: application/json
+### 3. Environment Variables
+The following environment variables are automatically configured by Render:
+- `SECRET_KEY`: Automatically generated
+- `DATABASE_URL`: Automatically linked to PostgreSQL database
+- `DEBUG`: Set to `false` for production
+- `ALLOWED_HOSTS`: Configured for Render domains
+- `CORS_ALLOWED_ORIGINS`: Set to your Render app URL
 
-{
-    "email": "user@example.com",
-    "password": "password123"
-}
-```
+### 4. Manual Environment Variables (if needed)
+If you need to set additional environment variables:
+1. Go to your service in Render Dashboard
+2. Navigate to "Environment" tab
+3. Add any additional variables like:
+   - `REACT_APP_API_URL`: Your Render app URL
 
-#### Logout User
-```
-POST /api/accounts/logout/
-Authorization: Token <your-token>
-```
+## API Endpoints
 
-#### Get User Profile
-```
-GET /api/accounts/profile/
-Authorization: Token <your-token>
-```
+### Authentication
+- `POST /api/accounts/register/` - User registration
+- `POST /api/accounts/login/` - User login
+- `POST /api/accounts/logout/` - User logout
+- `GET /api/accounts/profile/` - Get user profile
+- `PUT /api/accounts/profile/` - Update user profile
 
-### Student Endpoints
+### Students
+- `GET /api/students/` - List all students
+- `POST /api/students/` - Add new student
+- `GET /api/students/{id}/` - Get student details
+- `PUT /api/students/{id}/` - Update student
+- `DELETE /api/students/{id}/` - Delete student
+- `GET /api/students/search/?q={query}` - Search students
 
-#### Get All Students
-```
-GET /api/students/
-Authorization: Token <your-token>
-```
+### Payments
+- `GET /api/students/{id}/payments/` - Get student payments
+- `GET /api/students/{id}/payment_summary/` - Get payment summary
+- `POST /api/students/{id}/payments/` - Add payment
+- `PUT /api/students/{id}/payments/{payment_id}/` - Update payment
+- `DELETE /api/students/{id}/payments/{payment_id}/` - Delete payment
 
-#### Create Student
-```
-POST /api/students/
-Authorization: Token <your-token>
-Content-Type: application/json
-
-{
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john.doe@school.com",
-    "phone": "+1234567890",
-    "date_of_birth": "2005-01-01",
-    "address": "123 Main St",
-    "grade": "10",
-    "parent_name": "Jane Doe",
-    "parent_phone": "+1234567891"
-}
-```
-
-#### Get Student Details
-```
-GET /api/students/{id}/
-Authorization: Token <your-token>
-```
-
-#### Update Student
-```
-PUT /api/students/{id}/
-Authorization: Token <your-token>
-Content-Type: application/json
-
-{
-    "first_name": "John",
-    "last_name": "Smith",
-    "email": "john.smith@school.com",
-    "phone": "+1234567890",
-    "date_of_birth": "2005-01-01",
-    "address": "456 Oak St",
-    "grade": "11",
-    "parent_name": "Jane Smith",
-    "parent_phone": "+1234567891"
-}
-```
-
-#### Delete Student
-```
-DELETE /api/students/{id}/
-Authorization: Token <your-token>
-```
-
-### Fee Structure Endpoints
-
-#### Get All Fee Structures
-```
-GET /api/students/fee-structures/
-Authorization: Token <your-token>
-```
-
-#### Create Fee Structure
-```
-POST /api/students/fee-structures/
-Authorization: Token <your-token>
-Content-Type: application/json
-
-{
-    "grade": "10",
-    "fee_type": "Tuition",
-    "amount": 500.00,
-    "frequency": "Monthly"
-}
-```
-
-### Payment Endpoints
-
-#### Get All Payments
-```
-GET /api/students/payments/
-Authorization: Token <your-token>
-```
-
-#### Create Payment
-```
-POST /api/students/payments/
-Authorization: Token <your-token>
-Content-Type: application/json
-
-{
-    "student": 1,
-    "fee_structure": 1,
-    "amount_paid": 500.00,
-    "payment_date": "2024-01-15",
-    "payment_method": "Cash",
-    "payment_term": "January 2024",
-    "amount_due": 0.00,
-    "due_date": "2024-01-31",
-    "notes": "Tuition payment for January"
-}
-```
-
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 samayee/
-├── accounts/                 # Django app for user authentication
-│   ├── models.py            # Custom user model
-│   ├── serializers.py       # User serializers
-│   ├── views.py             # Authentication views
-│   └── urls.py              # Authentication URLs
-├── students/                # Django app for student management
-│   ├── models.py            # Student, FeeStructure, Payment models
-│   ├── serializers.py       # Student serializers
-│   ├── views.py             # Student views
-│   └── urls.py              # Student URLs
-├── core/                    # Django project settings
-│   ├── settings.py          # Django settings
-│   ├── urls.py              # Main URL configuration
-│   └── wsgi.py              # WSGI configuration
-├── react_app/               # React frontend application
+├── accounts/                 # User authentication app
+├── students/                 # Student and payment management app
+├── core/                     # Django project settings
+├── react_app/               # React frontend
 │   ├── src/
 │   │   ├── components/      # Reusable React components
-│   │   ├── pages/           # Page components
-│   │   ├── context/         # React context for state management
-│   │   ├── services/        # API service functions
-│   │   └── App.js           # Main App component
-│   ├── public/              # Static files
-│   └── package.json         # Node.js dependencies
-├── requirements.txt         # Python dependencies
-└── manage.py               # Django management script
+│   │   ├── pages/          # Page components
+│   │   ├── services/       # API service functions
+│   │   └── context/        # React context providers
+│   └── public/             # Static files
+├── build.sh                # Build script for deployment
+├── render.yaml             # Render deployment configuration
+├── requirements.txt        # Python dependencies
+└── env.example            # Environment variables template
 ```
 
-## 🔧 Configuration
-
-### Django Settings
-
-Key settings in `core/settings.py`:
-
-- **Database**: SQLite (default), can be configured for PostgreSQL/MySQL
-- **CORS**: Configured for React development server
-- **Authentication**: Token-based authentication
-- **Static Files**: Configured for production deployment
-
-### Environment Variables
-
-Create a `.env` file in the root directory for sensitive configuration:
-
-```env
-SECRET_KEY=your-secret-key
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-DATABASE_URL=sqlite:///db.sqlite3
-```
-
-## 🧪 Testing
-
-### Backend Testing
-```bash
-python manage.py test
-```
-
-### Frontend Testing
-```bash
-cd react_app
-npm test
-```
-
-## 🚀 Deployment
-
-### Backend Deployment
-
-1. **Set DEBUG=False in settings.py**
-2. **Configure production database**
-3. **Collect static files:**
-   ```bash
-   python manage.py collectstatic
-   ```
-4. **Deploy to your preferred hosting service (Heroku, AWS, etc.)**
-
-### Frontend Deployment
-
-1. **Build the production version:**
-   ```bash
-   cd react_app
-   npm run build
-   ```
-2. **Deploy the `build` folder to your hosting service**
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## Support
 
-If you encounter any issues or have questions:
-
-1. Check the [Issues](https://github.com/your-repo/issues) page
-2. Create a new issue with detailed description
-3. Contact the development team
-
-## 🔄 Version History
-
-- **v1.0.0**: Initial release with basic CRUD operations
-- **v1.1.0**: Added payment tracking and fee structures
-- **v1.2.0**: Enhanced UI/UX and form validation
-- **v1.3.0**: Added authentication and protected routes
-
----
-
-**Note**: This is a development version. For production use, ensure proper security measures, database optimization, and comprehensive testing. 
+For support and questions, please open an issue in the GitHub repository. 
