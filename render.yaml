@@ -21,4 +21,14 @@ services:
       - key: CORS_ALLOW_ALL_ORIGINS
         value: true
       - key: REACT_APP_API_URL
-        value: https://samayee.onrender.com 
+        value: https://samayee.onrender.com
+      - key: SUPERUSER_USERNAME
+        value: admin
+      - key: SUPERUSER_EMAIL
+        value: admin@samayee.com
+      - key: SUPERUSER_PASSWORD
+        value: admin123456
+      - key: SUPERUSER_FIRST_NAME
+        value: Admin
+      - key: SUPERUSER_LAST_NAME
+        value: User 

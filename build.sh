@@ -21,5 +21,6 @@ python manage.py collectstatic --noinput
 # Run database migrations
 python manage.py migrate
 
-# Create superuser automatically
-python manage.py createsuperuser_auto 
+# Create superuser non-interactively (will remove existing ones first)
+echo "Setting up superuser account..."
+python manage.py setup_superuser --non-interactive 
