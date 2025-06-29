@@ -77,7 +77,7 @@ MIDDLEWARE = [
 # CORS Settings
 CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=True, cast=bool)
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000,https://samayee.onrender.com').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000,http://192.168.0.106:3000,https://samayee.onrender.com').split(',')
 CORS_ALLOWED_HEADERS = [
     'accept',
     'accept-encoding',

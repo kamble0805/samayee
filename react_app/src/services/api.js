@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-// Use environment variable for API URL, fallback to deployed URL for production
+// Use environment variable for API URL, fallback to localhost for development
 const API_BASE_URL = process.env.REACT_APP_API_URL || 
-  (window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://samayee.onrender.com');
+  (window.location.hostname === 'localhost' || window.location.hostname.includes('192.168') ? 'http://localhost:8000' : 'https://samayee.onrender.com');
 
 console.log('API Base URL:', API_BASE_URL);
+console.log('Current hostname:', window.location.hostname);
 
 const api = axios.create({
     baseURL: API_BASE_URL,
