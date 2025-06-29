@@ -1,11 +1,7 @@
 import axios from 'axios';
 
-// Use environment variable for API URL, fallback to localhost for development
-const API_BASE_URL = process.env.REACT_APP_API_URL || 
-  (window.location.hostname === 'localhost' || window.location.hostname.includes('192.168') ? 'http://localhost:8000' : 'https://samayee.onrender.com');
-
-console.log('API Base URL:', API_BASE_URL);
-console.log('Current hostname:', window.location.hostname);
+// API base URL for development
+const API_BASE_URL = 'http://localhost:8000';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -46,29 +42,13 @@ api.interceptors.response.use(
 const apiService = {
   // Authentication API
   register: async (userData) => {
-    console.log('API: Sending registration request to:', `${API_BASE_URL}/api/accounts/register/`);
-    console.log('API: Registration data:', userData);
-    
     const response = await api.post('/api/accounts/register/', userData);
-    
-    console.log('API: Registration response status:', response.status);
-    const data = response.data;
-    console.log('API: Registration response data:', data);
-    
-    return data;
+    return response.data;
   },
 
   login: async (credentials) => {
-    console.log('API: Sending login request to:', `${API_BASE_URL}/api/accounts/login/`);
-    console.log('API: Login credentials:', credentials);
-    
     const response = await api.post('/api/accounts/login/', credentials);
-    
-    console.log('API: Login response status:', response.status);
-    const data = response.data;
-    console.log('API: Login response data:', data);
-    
-    return data;
+    return response.data;
   },
 
   logout: async (token) => {
@@ -88,10 +68,7 @@ const apiService = {
 
   // Students API
   getStudents: async (token) => {
-    console.log('API: Getting students...');
     const response = await api.get('/api/students/');
-    console.log('API: Students response:', response);
-    console.log('API: Students data:', response.data);
     return response.data;
   },
 
