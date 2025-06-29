@@ -1,4 +1,4 @@
-# 🏫 Samayee - School Management System
+# 🏫 Samayee - Coaching Class Management System
 
 [![Django](https://img.shields.io/badge/Django-5.1.4-green.svg)](https://www.djangoproject.com/)
 [![React](https://img.shields.io/badge/React-19.1.0-blue.svg)](https://reactjs.org/)
