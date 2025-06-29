@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum, Q
@@ -9,6 +9,40 @@ class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    def create(self, request, *args, **kwargs):
+        """Override create method to add debugging"""
+        print(f"StudentViewSet.create called with data: {request.data}")
+        print(f"User: {request.user}")
+        print(f"Authenticated: {request.user.is_authenticated}")
+        
+        try:
+            response = super().create(request, *args, **kwargs)
+            print(f"Student created successfully: {response.data}")
+            return response
+        except Exception as e:
+            print(f"Error creating student: {e}")
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    
+    def list(self, request, *args, **kwargs):
+        """Override list method to add debugging"""
+        print(f"StudentViewSet.list called")
+        print(f"User: {request.user}")
+        print(f"Authenticated: {request.user.is_authenticated}")
+        
+        try:
+            response = super().list(request, *args, **kwargs)
+            print(f"Students retrieved successfully: {len(response.data)} students")
+            return response
+        except Exception as e:
+            print(f"Error listing students: {e}")
+            return Response(
+                {'error': str(e)}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
     
     @action(detail=False, methods=['get'])
     def search(self, request):
