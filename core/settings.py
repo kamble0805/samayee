@@ -112,9 +112,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # Use PostgreSQL in production, SQLite in development
-if config('DATABASE_URL', default=None):
+if config('postgresql://samayee_db_user:tEhUuoUSjxTJb4QSyw08tZHWIIlomVfC@dpg-d1gcfpmmcj7s73ck11l0-a/samayee_db', default=None):
     DATABASES = {
-        'default': dj_database_url.parse(config('DATABASE_URL'))
+        'default': dj_database_url.parse(config('postgresql://samayee_db_user:tEhUuoUSjxTJb4QSyw08tZHWIIlomVfC@dpg-d1gcfpmmcj7s73ck11l0-a/samayee_db'))
     }
 else:
     DATABASES = {

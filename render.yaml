@@ -1,9 +1,3 @@
-databases:
-  - name: samayee-db
-    databaseName: samayee
-    user: samayee_user
-    plan: free
-
 services:
   - type: web
     name: samayee
@@ -19,12 +13,12 @@ services:
       - key: DEBUG
         value: false
       - key: DATABASE_URL
-        fromDatabase:
-          name: samayee-db
-          property: connectionString
+        value: postgresql://samayee_db_user:tEhUuoUSjxTJb4QSyw08tZHWIIlomVfC@dpg-d1gcfpmmcj7s73ck11l0-a/samayee_db
       - key: ALLOWED_HOSTS
         value: .onrender.com
       - key: CORS_ALLOWED_ORIGINS
         value: https://samayee.onrender.com
       - key: CORS_ALLOW_ALL_ORIGINS
-        value: false 
+        value: false
+      - key: REACT_APP_API_URL
+        value: https://samayee.onrender.com 
