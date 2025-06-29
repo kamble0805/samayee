@@ -12,7 +12,18 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config
+
+# Try to import decouple, fallback to os.environ for development
+try:
+    from decouple import config
+except ImportError:
+    # Fallback for development when python-decouple is not installed
+    def config(key, default=None, cast=None):
+        value = os.environ.get(key, default)
+        if cast is bool:
+            return value.lower() in ('true', '1', 'yes', 'on')
+        return value
+
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +37,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-^%6g^iizi6r_@k&^q-dq2+h(cp&6yjmdcu8y9h7fackaejlyis')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
@@ -112,9 +123,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # Use PostgreSQL in production, SQLite in development
-if config('postgresql://samayee_db_user:tEhUuoUSjxTJb4QSyw08tZHWIIlomVfC@dpg-d1gcfpmmcj7s73ck11l0-a/samayee_db', default=None):
+if config('DATABASE_URL', default=None):
     DATABASES = {
-        'default': dj_database_url.parse(config('postgresql://samayee_db_user:tEhUuoUSjxTJb4QSyw08tZHWIIlomVfC@dpg-d1gcfpmmcj7s73ck11l0-a/samayee_db'))
+        'default': dj_database_url.parse(config('DATABASE_URL'))
     }
 else:
     DATABASES = {
