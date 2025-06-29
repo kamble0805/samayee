@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-// Use environment variable for API URL, fallback to localhost for development
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+// Use environment variable for API URL, fallback to deployed URL for production
+const API_BASE_URL = process.env.REACT_APP_API_URL || 
+  (window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://samayee.onrender.com');
+
+console.log('API Base URL:', API_BASE_URL);
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -42,10 +45,10 @@ api.interceptors.response.use(
 const apiService = {
   // Authentication API
   register: async (userData) => {
-    console.log('API: Sending registration request to:', `${API_BASE_URL}/api/register/`);
+    console.log('API: Sending registration request to:', `${API_BASE_URL}/api/accounts/register/`);
     console.log('API: Registration data:', userData);
     
-    const response = await api.post('/api/register/', userData);
+    const response = await api.post('/api/accounts/register/', userData);
     
     console.log('API: Registration response status:', response.status);
     const data = response.data;
@@ -55,10 +58,10 @@ const apiService = {
   },
 
   login: async (credentials) => {
-    console.log('API: Sending login request to:', `${API_BASE_URL}/api/login/`);
+    console.log('API: Sending login request to:', `${API_BASE_URL}/api/accounts/login/`);
     console.log('API: Login credentials:', credentials);
     
-    const response = await api.post('/api/login/', credentials);
+    const response = await api.post('/api/accounts/login/', credentials);
     
     console.log('API: Login response status:', response.status);
     const data = response.data;
@@ -68,17 +71,17 @@ const apiService = {
   },
 
   logout: async (token) => {
-    const response = await api.post('/api/logout/');
+    const response = await api.post('/api/accounts/logout/');
     return response.data;
   },
 
   getProfile: async (token) => {
-    const response = await api.get('/api/profile/');
+    const response = await api.get('/api/accounts/profile/');
     return response.data;
   },
 
   updateProfile: async (token, userData) => {
-    const response = await api.put('/api/profile/', userData);
+    const response = await api.put('/api/accounts/profile/', userData);
     return response.data;
   },
 
