@@ -19,10 +19,9 @@ export default function Dashboard() {
     const fetchDashboardData = async () => {
       setLoading(true);
       try {
-        const [students, payments, feeStructures] = await Promise.all([
+        const [students, payments] = await Promise.all([
           api.getStudents(token),
-          api.getPayments(token),
-          api.getFeeStructures(token)
+          api.getPayments(token)
         ]);
 
         // Calculate total revenue
@@ -51,11 +50,6 @@ export default function Dashboard() {
       fetchDashboardData();
     }
   }, [token]);
-
-  const getStudentName = (studentId) => {
-    // This would need to be implemented with actual student data
-    return `Student ${studentId}`;
-  };
 
   if (loading) {
     return <div className="loading">Loading dashboard...</div>;

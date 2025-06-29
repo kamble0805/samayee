@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import './StudentProfileModal.css';
@@ -11,13 +11,7 @@ export default function StudentProfileModal({ student, isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    if (isOpen && student) {
-      fetchStudentDetails();
-    }
-  }, [isOpen, student]);
-
-  const fetchStudentDetails = async () => {
+  const fetchStudentDetails = useCallback(async () => {
     if (!student) return;
     
     setLoading(true);
@@ -39,7 +33,13 @@ export default function StudentProfileModal({ student, isOpen, onClose }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [student, token]);
+
+  useEffect(() => {
+    if (isOpen && student) {
+      fetchStudentDetails();
+    }
+  }, [isOpen, student, fetchStudentDetails]);
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-IN', {
