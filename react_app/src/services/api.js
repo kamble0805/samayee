@@ -87,7 +87,10 @@ const apiService = {
 
   // Students API
   getStudents: async (token) => {
+    console.log('API: Getting students...');
     const response = await api.get('/api/students/');
+    console.log('API: Students response:', response);
+    console.log('API: Students data:', response.data);
     return response.data;
   },
 

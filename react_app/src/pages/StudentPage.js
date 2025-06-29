@@ -34,17 +34,19 @@ export default function StudentPage() {
     try {
       await api.addStudent(token, form);
       const updatedStudents = await api.getStudents(token);
-      setStudents(updatedStudents);
-      setFilteredStudents(updatedStudents);
-    setForm({
-      first_name: "",
-      last_name: "",
-      parent_name: "",
-      parent_contact_primary: "",
-      parent_contact_secondary: "",
-      grade: "",
-      board: "",
-    });
+      // Ensure we get an array
+      const studentsArray = Array.isArray(updatedStudents) ? updatedStudents : [];
+      setStudents(studentsArray);
+      setFilteredStudents(studentsArray);
+      setForm({
+        first_name: "",
+        last_name: "",
+        parent_name: "",
+        parent_contact_primary: "",
+        parent_contact_secondary: "",
+        grade: "",
+        board: "",
+      });
     } catch (err) {
       setError("Failed to add student. Please try again.");
       console.error("Error adding student:", err);
@@ -58,8 +60,10 @@ export default function StudentPage() {
       try {
         await api.deleteStudent(token, id);
         const updatedStudents = await api.getStudents(token);
-        setStudents(updatedStudents);
-        setFilteredStudents(updatedStudents);
+        // Ensure we get an array
+        const studentsArray = Array.isArray(updatedStudents) ? updatedStudents : [];
+        setStudents(studentsArray);
+        setFilteredStudents(studentsArray);
       } catch (err) {
         setError("Failed to delete student. Please try again.");
         console.error("Error deleting student:", err);
@@ -77,7 +81,9 @@ export default function StudentPage() {
 
     try {
       const searchResults = await api.searchStudents(token, query);
-      setFilteredStudents(searchResults);
+      // Ensure we get an array
+      const resultsArray = Array.isArray(searchResults) ? searchResults : [];
+      setFilteredStudents(resultsArray);
     } catch (err) {
       console.error("Error searching students:", err);
       // Fallback to client-side filtering
@@ -105,13 +111,23 @@ export default function StudentPage() {
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
+      setError(null);
       try {
         const data = await api.getStudents(token);
-        setStudents(data);
-        setFilteredStudents(data);
+        console.log("API Response:", data); // Debug log
+        
+        // Ensure we get an array
+        const studentsArray = Array.isArray(data) ? data : [];
+        console.log("Students array:", studentsArray); // Debug log
+        
+        setStudents(studentsArray);
+        setFilteredStudents(studentsArray);
       } catch (err) {
         setError("Failed to fetch students. Please try again.");
         console.error("Error fetching students:", err);
+        // Set empty arrays on error
+        setStudents([]);
+        setFilteredStudents([]);
       } finally {
         setLoading(false);
       }
@@ -125,6 +141,9 @@ export default function StudentPage() {
   if (loading && students.length === 0) {
     return <div className="loading">Loading students...</div>;
   }
+
+  // Ensure filteredStudents is always an array
+  const safeFilteredStudents = Array.isArray(filteredStudents) ? filteredStudents : [];
 
   return (
     <div className="student-page">
@@ -195,11 +214,11 @@ export default function StudentPage() {
               <div className="form-group">
                 <label>Grade *</label>
                 <select name="grade" value={form.grade} onChange={handleChange} required>
-          <option value="">Select Grade</option>
-          {[...Array(10).keys()].map(i => (
+                  <option value="">Select Grade</option>
+                  {[...Array(10).keys()].map(i => (
                     <option key={i+1} value={String(i+1)}>{`Grade ${i+1}`}</option>
-          ))}
-        </select>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -207,22 +226,22 @@ export default function StudentPage() {
               <div className="form-group">
                 <label>Board *</label>
                 <select name="board" value={form.board} onChange={handleChange} required>
-          <option value="">Select Board</option>
-          <option value="CBSE">CBSE</option>
-          <option value="SSC">SSC</option>
-        </select>
+                  <option value="">Select Board</option>
+                  <option value="CBSE">CBSE</option>
+                  <option value="SSC">SSC</option>
+                </select>
               </div>
             </div>
 
             <button type="submit" disabled={loading} className="submit-btn">
               {loading ? "Adding Student..." : "Admit Student"}
             </button>
-      </form>
+          </form>
         </div>
 
         <div className="students-section">
           <div className="students-header">
-            <h3>Admitted Students ({filteredStudents.length})</h3>
+            <h3>Admitted Students ({safeFilteredStudents.length})</h3>
             <div className="search-container">
               <input
                 type="text"
@@ -244,13 +263,13 @@ export default function StudentPage() {
           
           {loading && <div className="loading">Loading...</div>}
           
-          {filteredStudents.length === 0 && !loading ? (
+          {safeFilteredStudents.length === 0 && !loading ? (
             <div className="no-students">
               {searchQuery ? "No students found matching your search." : "No students found."}
             </div>
           ) : (
             <div className="students-grid">
-              {filteredStudents.map(student => (
+              {safeFilteredStudents.map(student => (
                 <div key={student.id} className="student-card">
                   <div 
                     className="student-info"
